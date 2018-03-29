@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.zkt.testtoll.CrashDetailsActivity;
+import com.zkt.testtoll.R;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -52,15 +53,15 @@ public class CrashCatcher {
     public static void install(@Nullable final Context context) {
         try {
             if (context == null) {
-                Log.e(TAG, "CrashCatcher初始化失败");
+                Log.e(TAG, context.getString(R.string.init_error));
             } else {
                 final Thread.UncaughtExceptionHandler oldHandler = Thread.getDefaultUncaughtExceptionHandler();
 
                 if (oldHandler != null && oldHandler.getClass().getName().startsWith(CAOC_HANDLER_PACKAGE_NAME)) {
-                    Log.e(TAG, "CrashCatcher已初始化,请勿重复初始化");
+                    Log.e(TAG, context.getString(R.string.alreadinit));
                 } else {
                     if (oldHandler != null && !oldHandler.getClass().getName().startsWith(DEFAULT_HANDLER_PACKAGE_NAME)) {
-                        Log.e(TAG, "请确保App中只有一个自定义CrashCatcher！" + oldHandler.getClass().getName());
+                        Log.e(TAG, context.getString(R.string.shouldone) + oldHandler.getClass().getName());
                     }
 
                     final Application application = (Application) context.getApplicationContext();
@@ -70,7 +71,7 @@ public class CrashCatcher {
                         @Override
                         public void uncaughtException(Thread thread, final Throwable throwable) {
                             if (hasCrashedInTheLastSeconds(application)) {
-                                Log.e(TAG, "App频繁崩溃，暂不启动ErrorActivity！", throwable);
+                                Log.e(TAG, application.getString(R.string.error_more), throwable);
                                 if (oldHandler != null) {
                                     oldHandler.uncaughtException(thread, throwable);
                                     return;
@@ -79,13 +80,13 @@ public class CrashCatcher {
                                 setLastCrashTimestamp(application, new Date().getTime());
 
                                 if (isStackTraceLikelyConflictive(throwable, errorActivityClass)) {
-                                    Log.e(TAG, "Application或者ErrorActivity出错，不能启动自定义ErrorActivity");
+                                    Log.e(TAG, application.getString(R.string.cannot_show));
                                     if (oldHandler != null) {
                                         oldHandler.uncaughtException(thread, throwable);
                                         return;
                                     }
                                 } else {
-                                    Log.e(TAG, "App发生崩溃，执行CrashCatcher", throwable);
+                                    Log.e(TAG, application.getString(R.string.excute_catch), throwable);
                                     final Intent intent = new Intent(application, errorActivityClass);
                                     StringWriter sw = new StringWriter();
                                     PrintWriter pw = new PrintWriter(sw);
@@ -108,10 +109,10 @@ public class CrashCatcher {
                         }
                     });
                 }
-                Log.i(TAG, "CrashCatcher已经初始化完成");
+                Log.i(TAG, context.getString(R.string.init_finish));
             }
         } catch (Throwable t) {
-            Log.e(TAG, "初始化CrashCatcher失败，请检查是否正确配置", t);
+            Log.e(TAG, context.getString(R.string.init_error_check), t);
         }
     }
 

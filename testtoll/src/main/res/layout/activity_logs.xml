@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/action_filter"
                 android:minWidth="100dp"
+                android:textSize="14sp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/theme_accent" />
 

@@ -39,19 +39,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="@string/preference_category_crash_finder" >
-
-        <CheckBoxPreference
-            android:key="preference_crash_finder_vibrate"
-            android:title="@string/preference_title_crash_finder_vibrate"
-            android:defaultValue="true" />
-
-        <CheckBoxPreference
-            android:key="preference_crash_finder_sound"
-            android:title="@string/preference_title_crash_finder_sound"
-            android:defaultValue="false" />
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

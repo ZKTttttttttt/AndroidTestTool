@@ -22,6 +22,9 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        //根据保存的日志筛选级别设置ToolBar的颜色
+        int mToolbarColor = PrefUtils.getLevel(this).getColor();
+        findViewById(R.id.toolbar).setBackgroundColor(mToolbarColor);
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +46,6 @@ public class SettingsActivity extends Activity {
                     .commit();
         }
     }
-
 
 
     public static class SettingsFragment extends PreferenceFragment {
