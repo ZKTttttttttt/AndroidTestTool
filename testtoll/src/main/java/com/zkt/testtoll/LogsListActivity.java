@@ -40,7 +40,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     private RecyclerView mRecyclerView;
     private ImageView btnSearch;
-    private TextView btnSetting;
+    private TextView btnSetting, btnSelect;
     private EditText etKeyword;
 
     private LogAdapter mRecyclerAdapter;
@@ -62,6 +62,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         btnSetting = (TextView) findViewById(R.id.test_setting);
         btnSearch = (ImageView) findViewById(R.id.test_search);
         etKeyword = (EditText) findViewById(R.id.test_keyword);
+        btnSelect = (TextView) findViewById(R.id.test_select);
         mRecyclerView = (RecyclerView) findViewById(R.id.activity_main_recyclerview);
 
         //根据保存的日志筛选级别设置ToolBar的颜色
@@ -100,6 +101,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     //初始化Search和Setting
     private void initEvent() {
+        btnSelect.setOnClickListener(this);
         btnSearch.setOnClickListener(this);
         btnSetting.setOnClickListener(this);
         final String filter = PrefUtils.getSearchFilter(this);
@@ -135,6 +137,29 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
             etKeyword.clearFocus();
             CommonUtils.hideInputBoard(LogsListActivity.this);
         }
+
+        //选择日志
+        if (view == btnSelect) {
+            //将选中日志复制到剪切板
+            if (mRecyclerAdapter.isCanSelect()) {
+                StringBuffer logsDetails = new StringBuffer();
+                for (int i = 0; i < mRecyclerAdapter.getmLogList().size(); i++) {
+                    if (mRecyclerAdapter.getmLogList().get(i).isSelected()) {
+                        logsDetails.append(mRecyclerAdapter.getmLogList().get(i).getMessage() + "\n");
+                        mRecyclerAdapter.getmLogList().get(i).setSelected(false);
+                    }
+                }
+                CommonUtils.copyInfoToClipboard(LogsListActivity.this, logsDetails.toString());
+                mRecyclerAdapter.setSelectState(false);
+                btnSelect.setText(getResources().getString(R.string.select));
+            } else {
+                //进入选择模式
+                mRecyclerAdapter.setSelectState(true);
+                btnSelect.setText(getResources().getString(R.string.confirm));
+            }
+            mRecyclerAdapter.notifyDataSetChanged();
+        }
+
 
     }
 

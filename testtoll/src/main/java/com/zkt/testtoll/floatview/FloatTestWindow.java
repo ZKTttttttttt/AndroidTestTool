@@ -13,7 +13,7 @@ import com.zkt.testtoll.util.CommonUtils;
 /**
  * 具体的悬浮窗
  */
-public class TestToolFloatView extends FloatWindow {
+public class FloatTestWindow extends FloatWindow {
 
 
     @Override
@@ -32,7 +32,7 @@ public class TestToolFloatView extends FloatWindow {
         Context c = getApplicationContext();
         String contentTitle = getString(R.string.test_name);
         String tickerText = getString(R.string.click_show);
-        Intent notificationIntent = FloatWindow.getShowIntent(this, TestToolFloatView.class, id);
+        Intent notificationIntent = FloatWindow.getShowIntent(this, FloatTestWindow.class, id);
         PendingIntent contentIntent = null;
 
         if (notificationIntent != null) {

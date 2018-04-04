@@ -1,12 +1,17 @@
 package com.zkt.testtoll.util;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.zkt.testtoll.R;
 
 /**
  * 通用工具类
@@ -51,6 +56,17 @@ public class CommonUtils {
             return packageInfo.versionName;
         } catch (Exception e) {
             return "Unknown";
+        }
+    }
+
+
+    //复制错误信息到剪切板
+    public static void copyInfoToClipboard(Context context, String s) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null && !TextUtils.isEmpty(s)) {
+            ClipData clip = ClipData.newPlainText(context.getResources().getString(R.string.error_details_clipboard_label), s);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, R.string.copy_success, Toast.LENGTH_SHORT).show();
         }
     }
 }

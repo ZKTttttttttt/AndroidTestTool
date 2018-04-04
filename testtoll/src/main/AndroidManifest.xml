@@ -1,7 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zkt.testtoll">
 
-    <uses-permission android:name="android.permission.REORDER_TASKS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application>
@@ -14,7 +13,7 @@
         <activity android:name=".SettingsActivity" />
 
         <service
-            android:name=".floatview.TestToolFloatView"
+            android:name=".floatview.FloatTestWindow"
             android:label="LogcatLoggerFloatingView" />
     </application>
 

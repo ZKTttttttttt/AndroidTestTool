@@ -2,15 +2,12 @@
 package com.zkt.testtoll;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.TypedValue;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zkt.testtoll.crash.CrashCatcher;
 import com.zkt.testtoll.util.CommonUtils;
@@ -48,7 +45,7 @@ public final class CrashDetailsActivity extends Activity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                copyErrorToClipboard();
+                                CommonUtils.copyInfoToClipboard(CrashDetailsActivity.this, errorInformation);
                                 finish();
                             }
                         })
@@ -71,13 +68,4 @@ public final class CrashDetailsActivity extends Activity {
         errorInformation = errorDetails.toString();
     }
 
-    //复制错误信息到剪切板
-    private void copyErrorToClipboard() {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        if (clipboard != null) {
-            ClipData clip = ClipData.newPlainText(getString(R.string.error_details_clipboard_label), errorInformation);
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(CrashDetailsActivity.this, R.string.error_details_copied, Toast.LENGTH_SHORT).show();
-        }
-    }
 }

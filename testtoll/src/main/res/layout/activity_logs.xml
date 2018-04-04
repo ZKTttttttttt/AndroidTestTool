@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/test_nb_title"
@@ -24,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
-            android:layout_toLeftOf="@+id/test_setting"
+            android:layout_toLeftOf="@+id/test_select"
             android:layout_toRightOf="@+id/test_spinner"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -37,9 +36,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/action_filter"
                 android:minWidth="100dp"
-                android:textSize="14sp"
                 android:textColor="@color/white"
-                android:textColorHint="@color/theme_accent" />
+                android:textColorHint="@color/theme_accent"
+                android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/test_search"
@@ -47,6 +46,17 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_search" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/test_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/test_setting"
+            android:text="@string/select_logs"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/test_setting"
