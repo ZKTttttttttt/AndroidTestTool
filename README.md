@@ -7,11 +7,12 @@
 <img src="screenshots/shot3.png" width = "30%" />   <img src="screenshots/shot4.png" width = "30%" />
 <img src="screenshots/shot5.png" width = "30%" />   <img src="screenshots/shot6.png" width = "30%" />
 
-###使用说明
-Gradle：
+### 使用说明
+
+#### Gradle：
 compile 'com.zkt:testtool:1.0.0'
 
-Maven：
+#### Maven：
 <dependency>
   <groupId>com.zkt</groupId>
   <artifactId>testtool</artifactId>
