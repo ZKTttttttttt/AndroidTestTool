@@ -4,6 +4,9 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+/**
+ * 悬浮窗布局参数
+ **/
 public class FloatLayoutParams extends WindowManager.LayoutParams {
     private int[] screenSizes;
 
