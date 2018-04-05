@@ -12,20 +12,20 @@
 #### Gradle：
 compile 'com.zkt:testtool:1.0.0'
 
-public class TestApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        TestToolManager.initTestTool(this);
-    }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        TestToolManager.closeTestTool(this);
-    }
-}
-
+```public class TestApplication extends Application {
+     @Override
+     public void onCreate() {
+         super.onCreate();
+         TestToolManager.initTestTool(this);
+     }
+ 
+     @Override
+     public void onTerminate() {
+         super.onTerminate();
+         TestToolManager.closeTestTool(this);
+     }
+ }
+```
 
 ### [下载Demo](https://fir.im/androidtesttool)
 <img src="screenshots/download.png" width = "30%" />
