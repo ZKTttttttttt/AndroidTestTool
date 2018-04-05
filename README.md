@@ -12,7 +12,8 @@
 #### Gradle：
 compile 'com.zkt:testtool:1.0.0'
 
-```public class TestApplication extends Application {
+```
+public class TestApplication extends Application {
      @Override
      public void onCreate() {
          super.onCreate();
