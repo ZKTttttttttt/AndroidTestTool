@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zkt.testtool">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application>
+        <activity
+            android:name=".CrashDetailsActivity"
+            android:theme="@style/ErrorDialogActivityTheme" />
+        <activity
+            android:name=".LogsListActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".SettingsActivity" />
+
+        <service
+            android:name=".floatview.FloatTestWindow"
+            android:label="LogcatLoggerFloatingView" />
+    </application>
+
+</manifest>

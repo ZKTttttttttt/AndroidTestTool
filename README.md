@@ -8,17 +8,17 @@
 <img src="screenshots/shot5.png" width = "30%" />   <img src="screenshots/shot6.png" width = "30%" />
 
 ###使用说明
+Gradle：
+compile 'com.zkt:testtool:1.0.0'
 
-####Gradle
-compile 'com.zkt:testtoll:1.0.0'
-
-####Maven
+Maven：
 <dependency>
   <groupId>com.zkt</groupId>
-  <artifactId>testtoll</artifactId>
+  <artifactId>testtool</artifactId>
   <version>1.0.0</version>
   <type>pom</type>
-</dependency
+</dependency>
+
 
 
 ### [下载Demo](https://fir.im/androidtesttool)

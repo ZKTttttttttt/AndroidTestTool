@@ -2,7 +2,7 @@ package com.zkt.testapp;
 
 import android.app.Application;
 
-import com.zkt.testtoll.TestToolManager;
+import com.zkt.testtool.TestToolManager;
 
 /**
  * 作者： ZKT
