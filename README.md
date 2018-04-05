@@ -12,14 +12,19 @@
 #### Gradle：
 compile 'com.zkt:testtool:1.0.0'
 
-#### Maven：
-<dependency>
-  <groupId>com.zkt</groupId>
-  <artifactId>testtool</artifactId>
-  <version>1.0.0</version>
-  <type>pom</type>
-</dependency>
+public class TestApplication extends Application {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        TestToolManager.initTestTool(this);
+    }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        TestToolManager.closeTestTool(this);
+    }
+}
 
 
 ### [下载Demo](https://fir.im/androidtesttool)
