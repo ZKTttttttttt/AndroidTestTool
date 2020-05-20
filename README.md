@@ -5,31 +5,21 @@
 ### 预览
 <img src="screenshots/shot1.png" width = "30%" />   <img src="screenshots/shot2.png" width = "30%" />
 <img src="screenshots/shot3.png" width = "30%" />   <img src="screenshots/shot4.png" width = "30%" />
-<img src="screenshots/shot5.png" width = "30%" />   <img src="screenshots/shot6.png" width = "30%" />
+
 
 ### 使用说明
 
-#### Gradle：
-compile 'com.zkt:testtool:1.0.0'
+你可以直接将testtool引用为library module,也可以引用为.aar到libs中。
 
 ```
-public class TestApplication extends Application {
-     @Override
-     public void onCreate() {
-         super.onCreate();
-         TestToolManager.initTestTool(this);
-     }
+     在获取悬浮窗权限后在任意位置打开调试工具
+     TestToolManager.initTestTool(this);
+     
  
-     @Override
-     public void onTerminate() {
-         super.onTerminate();
-         TestToolManager.closeTestTool(this);
-     }
- }
+     关闭调试工具
+    TestToolManager.closeTestTool(this);
+  
 ```
-
-### [下载Demo](https://fir.im/androidtesttool)
-<img src="screenshots/download.png" width = "30%" />
 
 ## 参考
 
