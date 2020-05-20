@@ -1,5 +1,6 @@
 package com.zkt.testtool.util;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -18,12 +20,15 @@ import com.zkt.testtool.R;
  **/
 public class CommonUtils {
 
-
-    //隐藏键盘
-    public static void hideInputBoard(Context context) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null)
-            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+    /**
+     * 隐藏软键盘(只适用于Activity，不适用于Fragment)
+     */
+    public static void hideInputBoard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     //获取屏幕chicun

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidTestTool</string>
+    <string name="show_float">显示悬浮窗</string>
+    <string name="dismiss_float">隐藏悬浮窗</string>
 </resources>

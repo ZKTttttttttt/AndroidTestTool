@@ -40,9 +40,9 @@ public class CrashCatcher {
     private static final int MAX_STACK_TRACE_SIZE = 131071; //128 KB - 1
 
     /*
-    *定义应用程序崩溃之间必须经过的时间，以确定我们不在崩溃循环中。
-    * 如果这一次发生的崩溃距离上次小于此时间，错误活动将不会启动。默认值是3000。
-    */
+     *定义应用程序崩溃之间必须经过的时间，以确定我们不在崩溃循环中。
+     * 如果这一次发生的崩溃距离上次小于此时间，错误活动将不会启动。默认值是3000。
+     */
     private static int minTimeBetweenCrashesMs = 3000;
 
     //展示错误信息的ErrorActivity类

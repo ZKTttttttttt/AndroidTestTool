@@ -10,11 +10,7 @@
         <activity
             android:name=".LogsListActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".SettingsActivity" />
 
-        <service
-            android:name=".floatview.FloatTestWindow"
-            android:label="LogcatLoggerFloatingView" />
     </application>
 
 </manifest>

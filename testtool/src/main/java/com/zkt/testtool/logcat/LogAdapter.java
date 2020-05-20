@@ -1,9 +1,10 @@
 package com.zkt.testtool.logcat;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,19 +17,18 @@ import java.util.List;
 /**
  * 描述：日志adapter
  */
-public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
-
-
+public class LogAdapter extends BaseAdapter {
     private final List<Log> mLogList;
-
+    private Context context;
     public boolean isCanSelect() {
         return canSelect;
     }
 
     private boolean canSelect;
 
-    public LogAdapter() {
+    public LogAdapter(Context context) {
         this.mLogList = new ArrayList<>();
+        this.context=context;
     }
 
     public void setSelectState(boolean i) {
@@ -36,16 +36,37 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         notifyDataSetChanged();
     }
 
+
     @Override
-    public LogAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_log_item, null, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+    public int getCount() {
+        return mLogList.size();
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public Log getItem(int position) {
+        return mLogList.get(position);
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        View view;
+        final ViewHolder holder;
+        if (convertView == null){
+            // inflate出子项布局，实例化其中的图片控件和文本控件
+            view = LayoutInflater.from(context).inflate(R.layout.test_layout_log_item, null);
+
+            holder = new ViewHolder(view);
+            view.setTag(holder);
+        }else{
+            view = convertView;
+            holder = (ViewHolder) view.getTag();
+        }
         holder.mTextView.setText(getItem(position).getMessage());
         holder.mTextView.setTextColor(getItem(position).getLevel().getColor());
         holder.tvSelect.setOnClickListener(new View.OnClickListener() {
@@ -59,25 +80,20 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         if (!canSelect) {
             holder.tvSelect.setSelected(false);
         }
-    }
 
-    @Override
-    public int getItemCount() {
-        return mLogList.size();
-    }
-
-    public Log getItem(int position) {
-        return mLogList.get(position);
+        return view;
     }
 
     public void addAll(int previousCount, List<Log> logList) {
         mLogList.addAll(logList);
-        notifyItemRangeInserted(previousCount + 1, logList.size());
+        notifyDataSetChanged();
     }
 
     public void removeFirstItems(int count) {
-        for (int i = 0; i < count; i++) mLogList.remove(0);
-        notifyItemRangeRemoved(0, count);
+        for (int i = 0; i < count; i++) {
+            mLogList.remove(0);
+        }
+        notifyDataSetChanged();
     }
 
     public void clear() {
@@ -89,12 +105,11 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.ViewHolder> {
         return mLogList;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder {
         public TextView mTextView;
         public ImageView tvSelect;
 
         public ViewHolder(View v) {
-            super(v);
             mTextView = (TextView) v.findViewById(R.id.lv_log_tv);
             tvSelect = (ImageView) v.findViewById(R.id.btn_select);
         }

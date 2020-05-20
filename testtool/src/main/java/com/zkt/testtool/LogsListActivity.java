@@ -4,11 +4,8 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -16,7 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,33 +36,39 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     public static final int MAX_LOG_ITEMS = 500;
 
-    private RecyclerView mRecyclerView;
+    private ListView lvlogs;
     private ImageView btnSearch;
-    private TextView btnSetting, btnSelect;
+    private TextView btnSelect, btnAutoFresh,btnClear;
     private EditText etKeyword;
 
-    private LogAdapter mRecyclerAdapter;
+    private LogAdapter logsAdapter;
 
     private Logcat mLogcat;
     private Handler mLogHandler;
 
+    boolean mAutoScroll = false;//自动滑动到最新log处
 
     private int mToolbarColor;//ToolBar颜色
 
-    private RelativeLayout toolbar;//顶部工具栏
+    private LinearLayout toolbar;//顶部工具栏
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logs);
-        toolbar = (RelativeLayout) findViewById(R.id.test_nb_title);
+        setContentView(R.layout.test_activity_logs);
+        toolbar = (LinearLayout) findViewById(R.id.test_nb_title);
         Spinner spinner = (Spinner) findViewById(R.id.test_spinner);
-        btnSetting = (TextView) findViewById(R.id.test_setting);
         btnSearch = (ImageView) findViewById(R.id.test_search);
         etKeyword = (EditText) findViewById(R.id.test_keyword);
         btnSelect = (TextView) findViewById(R.id.test_select);
-        mRecyclerView = (RecyclerView) findViewById(R.id.activity_main_recyclerview);
-
+        btnAutoFresh = (TextView) findViewById(R.id.test_auto);
+        btnClear = (TextView) findViewById(R.id.test_clear);
+        lvlogs = (ListView) findViewById(R.id.activity_main_recyclerview);
+        lvlogs.setStackFromBottom(true);
+        btnSelect.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+        btnSearch.setOnClickListener(this);
+        btnAutoFresh.setOnClickListener(this);
         //根据保存的日志筛选级别设置ToolBar的颜色
         mToolbarColor = PrefUtils.getLevel(this).getColor();
         toolbar.setBackgroundColor(mToolbarColor);
@@ -81,29 +85,21 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         final ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
                 LogsListActivity.this,
                 R.array.log_levels,
-                R.layout.layout_spinner_item);
+                R.layout.test_layout_spinner_item);
 
-        spinnerAdapter.setDropDownViewResource(R.layout.layout_spinner_item_dropdown);
+        spinnerAdapter.setDropDownViewResource(R.layout.test_layout_spinner_item_dropdown);
         spinner.setAdapter(spinnerAdapter);
         spinner.setSelection(PrefUtils.getLevel(this).ordinal());
         spinner.setOnItemSelectedListener(this);
     }
 
-    //初始化RecyclerView
     private void initRecyclerView() {
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setStackFromEnd(true);
-        mRecyclerAdapter = new LogAdapter();
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        logsAdapter = new LogAdapter(this);
+        lvlogs.setAdapter(logsAdapter);
     }
 
     //初始化Search和Setting
     private void initEvent() {
-        btnSelect.setOnClickListener(this);
-        btnSearch.setOnClickListener(this);
-        btnSetting.setOnClickListener(this);
         final String filter = PrefUtils.getSearchFilter(this);
         if (!TextUtils.isEmpty(filter)) {
             if (mLogcat != null) {
@@ -117,10 +113,6 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     @Override
     public void onClick(View view) {
-        //到设置界面
-        if (view == btnSetting) {
-            startActivity(new Intent(LogsListActivity.this, SettingsActivity.class));
-        }
         //进行日志过滤
         if (view == btnSearch) {
             String key = etKeyword.getText().toString();
@@ -141,31 +133,39 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         //选择日志
         if (view == btnSelect) {
             //将选中日志复制到剪切板
-            if (mRecyclerAdapter.isCanSelect()) {
+            if (logsAdapter.isCanSelect()) {
                 StringBuffer logsDetails = new StringBuffer();
-                for (int i = 0; i < mRecyclerAdapter.getmLogList().size(); i++) {
-                    if (mRecyclerAdapter.getmLogList().get(i).isSelected()) {
-                        logsDetails.append(mRecyclerAdapter.getmLogList().get(i).getMessage() + "\n");
-                        mRecyclerAdapter.getmLogList().get(i).setSelected(false);
+                for (int i = 0; i < logsAdapter.getmLogList().size(); i++) {
+                    if (logsAdapter.getmLogList().get(i).isSelected()) {
+                        logsDetails.append(logsAdapter.getmLogList().get(i).getMessage() + "\n");
+                        logsAdapter.getmLogList().get(i).setSelected(false);
                     }
                 }
                 CommonUtils.copyInfoToClipboard(LogsListActivity.this, logsDetails.toString());
-                mRecyclerAdapter.setSelectState(false);
+                logsAdapter.setSelectState(false);
                 btnSelect.setText(getResources().getString(R.string.select));
             } else {
                 //进入选择模式
-                mRecyclerAdapter.setSelectState(true);
+                logsAdapter.setSelectState(true);
                 btnSelect.setText(getResources().getString(R.string.confirm));
             }
-            mRecyclerAdapter.notifyDataSetChanged();
+            logsAdapter.notifyDataSetChanged();
         }
-
+        if (view == btnAutoFresh) {
+            mAutoScroll = !mAutoScroll;
+            btnAutoFresh.setText(mAutoScroll?getString(R.string.noauto_logs):getString(R.string.auto_logs));
+        }
+        if (view==btnClear){
+            logsAdapter.clear();
+            if (mLogcat != null) {
+                mLogcat.clearLogs();
+            }
+        }
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
         //根据选择的日志筛选级别进行过滤
         final Level level = Level.get(position);
         PrefUtils.setLevel(this, level);
@@ -180,12 +180,12 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
     @Override
     protected void onResume() {
         super.onResume();
-        if (mLogHandler == null) mLogHandler = new Handler(this);
-        if (mLogcat == null) mLogcat = new Logcat(
-                mLogHandler,
-                PrefUtils.getLevel(this),
-                PrefUtils.getFormat(this),
-                PrefUtils.getBuffer(this));
+        if (mLogHandler == null) {
+            mLogHandler = new Handler(this);
+        }
+        if (mLogcat == null) {
+            mLogcat = new Logcat(mLogHandler, PrefUtils.getLevel(this), PrefUtils.getFormat(this));
+        }
         mLogcat.start();
         initEvent();
     }
@@ -194,7 +194,9 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
     protected void onPause() {
         super.onPause();
         mLogHandler = null;
-        if (mLogcat != null) mLogcat.stop();
+        if (mLogcat != null) {
+            mLogcat.stop();
+        }
         mLogcat = null;
 
     }
@@ -233,11 +235,11 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     //刷新日志
     private void updateLogs(final List<Log> logList) {
-        boolean mAutoScroll = true;
-        final boolean scroll = mAutoScroll;
-        int currentSize = mRecyclerAdapter.getItemCount();
-        mRecyclerAdapter.addAll(currentSize, logList);
-        if (scroll) mRecyclerView.smoothScrollToPosition(mRecyclerAdapter.getItemCount() - 1);
+        int currentSize = logsAdapter.getCount();
+        logsAdapter.addAll(currentSize, logList);
+        if (mAutoScroll) {
+            lvlogs.smoothScrollToPosition(logsAdapter.getCount() - 1);
+        }
     }
 
     private static class Handler extends android.os.Handler {
@@ -251,7 +253,9 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         @Override
         public void handleMessage(Message msg) {
             LogsListActivity activity = mActivity.get();
-            if (activity == null) return;
+            if (activity == null) {
+                return;
+            }
             switch (msg.what) {
                 case Logcat.CAT_LOGS:
                     @SuppressWarnings("unchecked")
@@ -259,13 +263,17 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
                     activity.updateLogs(catLogs);
                     break;
                 case Logcat.CLEAR_LOGS:
-                    if (!activity.mRecyclerView.canScrollVertically(-1)) return;
-                    if (activity.mRecyclerAdapter.getItemCount() > MAX_LOG_ITEMS)
-                        activity.mRecyclerAdapter.removeFirstItems(
-                                activity.mRecyclerAdapter.getItemCount() - MAX_LOG_ITEMS);
+                    if (!activity.lvlogs.canScrollVertically(-1)) {
+                        return;
+                    }
+                    if (activity.logsAdapter.getCount() > MAX_LOG_ITEMS) {
+                        activity.logsAdapter.removeFirstItems(activity.logsAdapter.getCount() - MAX_LOG_ITEMS);
+                    }
                     break;
                 case Logcat.REMOVE_LOGS:
-                    activity.mRecyclerAdapter.clear();
+                    activity.logsAdapter.clear();
+                    break;
+                default:
                     break;
             }
         }
