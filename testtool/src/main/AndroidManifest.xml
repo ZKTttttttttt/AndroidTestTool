@@ -8,7 +8,7 @@
             android:name=".CrashDetailsActivity"
             android:theme="@style/ErrorDialogActivityTheme" />
         <activity
-            android:name=".LogsListActivity"
+            android:name=".LogListActivity"
             android:launchMode="singleTask" />
 
     </application>

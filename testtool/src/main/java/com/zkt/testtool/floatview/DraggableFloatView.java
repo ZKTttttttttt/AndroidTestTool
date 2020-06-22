@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.zkt.testtool.LogsListActivity;
+import com.zkt.testtool.LogListActivity;
 import com.zkt.testtool.R;
 
 @SuppressLint("ViewConstructor")
@@ -69,7 +69,7 @@ public class DraggableFloatView extends LinearLayout {
         btnLogs.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, LogsListActivity.class);
+                Intent intent = new Intent(context, LogListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }

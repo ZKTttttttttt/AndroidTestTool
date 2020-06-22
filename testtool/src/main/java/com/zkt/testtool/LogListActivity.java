@@ -32,13 +32,13 @@ import java.util.List;
 /**
  * 描述：日志输出界面
  */
-public class LogsListActivity extends Activity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+public class LogListActivity extends Activity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     public static final int MAX_LOG_ITEMS = 500;
 
     private ListView lvlogs;
     private ImageView btnSearch;
-    private TextView btnSelect, btnAutoFresh,btnClear;
+    private TextView btnSelect, btnAutoFresh, btnClear;
     private EditText etKeyword;
 
     private LogAdapter logsAdapter;
@@ -51,6 +51,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
     private int mToolbarColor;//ToolBar颜色
 
     private LinearLayout toolbar;//顶部工具栏
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
     //初始化下拉框
     private void initSpinner(Spinner spinner) {
         final ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-                LogsListActivity.this,
+                LogListActivity.this,
                 R.array.log_levels,
                 R.layout.test_layout_spinner_item);
 
@@ -117,17 +118,17 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         if (view == btnSearch) {
             String key = etKeyword.getText().toString();
             if (TextUtils.isEmpty(key)) {
-                PrefUtils.removeSearchFilter(LogsListActivity.this);
+                PrefUtils.removeSearchFilter(LogListActivity.this);
                 mLogcat.setSearchFilter("");
             } else {
                 btnSearch.clearFocus();
-                PrefUtils.setSearchFilter(LogsListActivity.this, key);
+                PrefUtils.setSearchFilter(LogListActivity.this, key);
                 if (mLogcat != null) {
                     mLogcat.setSearchFilter(key);
                 }
             }
             etKeyword.clearFocus();
-            CommonUtils.hideInputBoard(LogsListActivity.this);
+            CommonUtils.hideInputBoard(LogListActivity.this);
         }
 
         //选择日志
@@ -141,7 +142,7 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
                         logsAdapter.getmLogList().get(i).setSelected(false);
                     }
                 }
-                CommonUtils.copyInfoToClipboard(LogsListActivity.this, logsDetails.toString());
+                CommonUtils.copyInfoToClipboard(LogListActivity.this, logsDetails.toString());
                 logsAdapter.setSelectState(false);
                 btnSelect.setText(getResources().getString(R.string.select));
             } else {
@@ -153,13 +154,16 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
         }
         if (view == btnAutoFresh) {
             mAutoScroll = !mAutoScroll;
-            btnAutoFresh.setText(mAutoScroll?getString(R.string.noauto_logs):getString(R.string.auto_logs));
+            btnAutoFresh.setText(mAutoScroll ? getString(R.string.noauto_logs) : getString(R.string.auto_logs));
         }
-        if (view==btnClear){
+        if (view == btnClear) {
+            Logcat.TAG++;
+            Logcat.ISREADY = false;
             logsAdapter.clear();
             if (mLogcat != null) {
                 mLogcat.clearLogs();
             }
+            android.util.Log.i("日志分割线" + Logcat.TAG, "********************************************************************************");
         }
 
     }
@@ -244,15 +248,15 @@ public class LogsListActivity extends Activity implements AdapterView.OnItemSele
 
     private static class Handler extends android.os.Handler {
 
-        private final WeakReference<LogsListActivity> mActivity;
+        private final WeakReference<LogListActivity> mActivity;
 
-        public Handler(LogsListActivity activity) {
+        public Handler(LogListActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            LogsListActivity activity = mActivity.get();
+            LogListActivity activity = mActivity.get();
             if (activity == null) {
                 return;
             }

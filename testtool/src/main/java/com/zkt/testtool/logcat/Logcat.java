@@ -8,8 +8,12 @@ import android.text.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -46,6 +50,8 @@ public class Logcat {
     private final ArrayList<Log> mLogCache = new ArrayList<>();
     private LogcatTask mLogcatTask;
 
+    public static int TAG;
+    public static boolean ISREADY = true;
     private Runnable catRunner = new Runnable() {
         @Override
         public void run() {
@@ -115,10 +121,11 @@ public class Logcat {
     }
 
     public void clearLogs() {
-		if (mLogcatTask != null ) {
-			mLogcatTask.clearLogs();
-		}
-	}
+        if (mLogcatTask != null) {
+            mLogcatTask.clearLogs();
+            mLogCache.clear();
+        }
+    }
 
     /**
      * Sets the minimum log level for the output logs. This will restart the task so the old logs will be
@@ -249,9 +256,16 @@ public class Logcat {
                             continue;
                         }
                     }
-
-                    synchronized (mLogCache) {
-                        mLogCache.add(mLogParser.parseLine(line));
+                    if (TAG > 0 && line.contains("日志分割线" + Logcat.TAG)) {
+                        ISREADY = true;
+                        mLogCache.clear();
+                    }
+                    if (ISREADY) {
+                        {
+                            synchronized (mLogCache) {
+                                mLogCache.add(mLogParser.parseLine(line));
+                            }
+                        }
                     }
                 }
             } catch (IOException e) {

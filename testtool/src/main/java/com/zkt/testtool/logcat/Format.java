@@ -17,7 +17,6 @@ public enum Format{
 	Format(String title, Pattern pattern, int titleId){
 		this.mTitle = title;
 		this.mPattern = pattern;
-		//== null ? Pattern.compile(pattern) : null;
 		this.mTitleId = titleId;
 	}
 	

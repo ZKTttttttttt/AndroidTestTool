@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void printlogs() {
-        btnLogs.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                printlogs();
-            }
-        }, 5000);
+//        btnLogs.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                printlogs();
+//            }
+//        }, 5000);
         android.util.Log.v(TAG, System.currentTimeMillis() + "VVVVVVVVVVVV");
         android.util.Log.d(TAG, System.currentTimeMillis() + "DDDDDDDDDDDD");
         android.util.Log.i(TAG, System.currentTimeMillis() + "IIIIIIIIIIII");
