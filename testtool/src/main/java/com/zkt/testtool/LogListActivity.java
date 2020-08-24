@@ -163,7 +163,7 @@ public class LogListActivity extends Activity implements AdapterView.OnItemSelec
             if (mLogcat != null) {
                 mLogcat.clearLogs();
             }
-            android.util.Log.i("日志分割线" + Logcat.TAG, "********************************************************************************");
+            android.util.Log.i(getString(R.string.log_clear_tag) + Logcat.TAG, getString(R.string.log_clear_taghint));
         }
 
     }

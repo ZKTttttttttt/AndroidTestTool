@@ -17,6 +17,9 @@ import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "哈哈哈";
+    private static final String TAG1 = "呀呀呀";
+    private static final String TAG2 = "哇哇哇";
+    private static final String TAG3 = "呱呱呱";
     TextView btnCrash, btnLogs;
 
     @Override
@@ -53,11 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                printlogs();
 //            }
 //        }, 5000);
-        android.util.Log.v(TAG, System.currentTimeMillis() + "VVVVVVVVVVVV");
-        android.util.Log.d(TAG, System.currentTimeMillis() + "DDDDDDDDDDDD");
-        android.util.Log.i(TAG, System.currentTimeMillis() + "IIIIIIIIIIII");
-        android.util.Log.w(TAG, System.currentTimeMillis() + "WWWWWWWWWWWW");
-        android.util.Log.e(TAG, System.currentTimeMillis() + "EEEEEEEEEEEE");
+        android.util.Log.v(TAG, System.currentTimeMillis() + "AAAAAAAA");
+        android.util.Log.d(TAG1, System.currentTimeMillis() + "BBBBBBBBBBB");
+        android.util.Log.i(TAG2, System.currentTimeMillis() + "CCCCCCCCC");
+        android.util.Log.w(TAG3, System.currentTimeMillis() + "DDDDDDDDDDD");
+
+        android.util.Log.v(TAG, System.currentTimeMillis() + "EEEEEEEEEEEEEE");
+        android.util.Log.d(TAG1, System.currentTimeMillis() + "FFFFFFFFFFFFF");
+        android.util.Log.i(TAG2, System.currentTimeMillis() + "GGGGGGGGGGGG");
+        android.util.Log.w(TAG3, System.currentTimeMillis() + "HHHHHHHHHHHHHHH");
     }
 
     private boolean commonROMPermissionCheck(Context context) {

@@ -250,15 +250,15 @@ public class Logcat {
                     if (line.length() == 0) {
                         continue;
                     }
+                    if (TAG > 0 && line.contains("日志分割线" + Logcat.TAG)) {
+                        ISREADY = true;
+                        mLogCache.clear();
+                    }
 
                     if (mLogFilter != null) {
                         if (!line.contains(mLogFilter)) {
                             continue;
                         }
-                    }
-                    if (TAG > 0 && line.contains("日志分割线" + Logcat.TAG)) {
-                        ISREADY = true;
-                        mLogCache.clear();
                     }
                     if (ISREADY) {
                         {

@@ -41,4 +41,6 @@
     <string name="some_logs">日志详情</string>
     <string name="confirm">确定</string>
     <string name="select">选取</string>
+    <string name="log_clear_tag">日志分割线</string>
+    <string name="log_clear_taghint">********************************************************************************</string>
 </resources>
